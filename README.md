@@ -53,6 +53,6 @@ python main.py \
 * --lr: learning rate 設定
 * --batch: 設定 batch size 值
 * --checkpoint: 模型存放路徑
-* --aug: 設定 True 會在訓練階段時，load 訓練資料集時做 image augmentation 詳細內容請見 [dataloader.py][dataloader.py]
+* --aug: 設定 True 會在訓練階段時，load 訓練資料集時做 image augmentation 詳細內容請見 [dataloader.py](dataloader.py)
 
 
