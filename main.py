@@ -112,7 +112,7 @@ def main(args, state):
     # print(model)
 
     criterion = LossFunction(args.loss)
-    print ('{} is ready!'.format(args.loss))
+    print ('LossFunction: {} is ready!'.format(args.loss))
     
     optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=args.lr, eps=1e-4)
 

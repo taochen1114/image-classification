@@ -137,7 +137,7 @@ def get_loader(args,
         return (train_loader, val_loader)
     else:
         print("Testing Mode, loading data ...")
-        dataset_test = ClassificationImage(args.num_classes, args.test, args.loss, False, test_transform)
+        dataset_test = ClassificationImage(args.data_dir, args.num_classes, args.test, args.loss, False, test_transform)
         test_loader = DataLoader(dataset_test,
                                  batch_size=args.batch,
                                  shuffle=False,

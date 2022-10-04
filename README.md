@@ -23,11 +23,12 @@ data/
 * label (int): 類別定義
 
 <!-- ![](image/train_dataframe.png) -->
- <img src="image/train_dataframe.png" width = "300" height = "200" alt="" align=center />
+
+<img src="image/train_dataframe.png" width = "320" alt="" align=center />
 
 <!-- ![](image/val_dataframe.png) -->
- <img src="image/val_dataframe.png" width = "300" height = "200" alt="" align=center />
 
+<img src="image/val_dataframe.png" width = "320" alt="" align=center />
 
 ## Model Training
 
@@ -50,7 +51,6 @@ python main.py \
 * --data-dir: 資料集所在的根目錄
 * --train:  訓練資料集 train.csv 所在的路徑
 * --val:  驗證資料集 val.csv 所在的路徑
-* --test: 測試資料集 test.csv 所在的路徑
 * --arch: 模型架構設定 resnet18, resnet34, resnet50, ...etc
 * --num-classes: 類別數量設定，如果是貓狗照片分類的任務類別數量就是 2
 * --epochs: 設定訓練多少個 epoch 數量
@@ -59,4 +59,46 @@ python main.py \
 * --checkpoint: 模型存放路徑
 * --aug: 設定 True 會在訓練階段時，load 訓練資料集時做 image augmentation 詳細內容請見 [dataloader.py](dataloader.py)
 
+**training demo**
 
+<img src="image/training_demo.png" width = "500" alt="" align=center />
+
+
+## Model Inference
+
+```
+python inference.py  \
+    --data-dir data/  \
+    --test-mode True  \
+    --test data/dogs-vs-cats/val.csv  \
+    --arch resnet18  \
+    -c model_ckpt/  \
+    --model-file model_best.pth.tar \
+    --num-classes 2  \
+    --class-def data/dogs-vs-cats/class_def.txt  
+```
+
+參數說明: ( 詳情請參考 [config.py](config.py) )
+
+* --data-dir: 資料集所在的根目錄
+* --test-mode: 測試模式，在 testing 階段要設為 True 詳細內容請見 [dataloader.py](dataloader.py)
+* --test: 測試資料集 test.csv 所在的路徑
+* --arch: 模型架構設定 resnet18, resnet34, resnet50, ...etc
+* --batch: 設定 batch size 值
+* -c: 模型存放的資料夾，預設為 model_ckpt
+* --model-file: 模型檔名，預設為 model_best.pth.tar
+* --num-classes: 類別數量設定，如果是貓狗照片分類的任務類別數量就是 2
+* --class-def: 類別的名稱定義的文字檔路徑，需準備一個 txt 檔案，一行放一個類別名稱，例如貓狗辨識的類別定義如下所示:
+
+<img src="image/class_def_txt.png" width = "320" alt="" align=center />
+
+### Inference report
+
+inference 的 confusion matrix 與 ROC curve 都會存放在 checkpoint 路徑
+
+<img src="image/checkpoint_contents_demo.png" width = "400" alt="" align=center />
+<!-- ![img](image/checkpoint_contents_demo.png) -->
+
+**classification report demo**
+
+<img src="image/classification_report_demo.png" width = "500" alt="" align=center />

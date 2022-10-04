@@ -9,6 +9,11 @@ parser.add_argument('--train', default='train.csv', type=str, help='path to trai
 parser.add_argument('--val', default='val.csv', type=str, help='path to val csv (default: val.csv)')
 parser.add_argument('--test', default='test.csv', type=str, help='path to test csv (default: test.csv)')
 parser.add_argument('--test-mode', default=None, type=str, help='set True for Testing / Inference mode')
+parser.add_argument('--model-file', default='model_best.pth.tar', type=str, help='model file name in checkpoint directory')
+parser.add_argument('--class-def', default='class_def.txt', type=str, help='class definition text file one row per class')
+
+parser.add_argument('-c', '--checkpoint', default='model_ckpt', type=str,
+                    help='path to save model checkpoint (default: model_ckpt)')
 
 parser.add_argument('-j', '--workers', default=8, type=int,
                     help='number of data loading workers (default: 8)')
@@ -26,10 +31,6 @@ parser.add_argument('--schedule', type=int, nargs='+', default=[30, 40],
 parser.add_argument('--gamma', type=float, default=0.9, help='learning rate be multiplied by gamma on schedule (default: 0.9)')
 parser.add_argument('--loss', default='CrossEntropyLoss', 
                     help='loss function [CrossEntropyLoss, BCELoss, BCEWithLogitsLoss, f1score] (default: CrossEntropyLoss)')
-
-parser.add_argument('-c', '--checkpoint', default='model_ckpt', type=str,
-                    help='path to save model checkpoint (default: model_ckpt)')
-
 
 # Architecture
 parser.add_argument('--arch', '-a', metavar='ARCH', default='resnet50', 
