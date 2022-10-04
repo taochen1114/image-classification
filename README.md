@@ -46,18 +46,15 @@ python main.py \
 ```
 
 參數說明:
-
---data-dir: 資料集所在的根目錄
---train:  訓練資料集 train.csv 所在的路徑
---val:  驗證資料集 val.csv 所在的路徑
---test: 測試資料集 test.csv 所在的路徑
---arch: 模型架構設定 resnet18, resnet34, resnet50, ...etc
---num-classes: 類別數量設定，如果是貓狗照片分類的任務類別數量就是 2 
---epochs: 設定訓練多少個 epoch 數量
---lr: learning rate 設定
---batch: 設定 batch size 值
---checkpoint: 模型存放路徑
+* --data-dir: 資料集所在的根目錄 
+* --train:  訓練資料集 train.csv 所在的路徑
+* --val:  驗證資料集 val.csv 所在的路徑
+* --test: 測試資料集 test.csv 所在的路徑
+* --arch: 模型架構設定 resnet18, resnet34, resnet50, ...etc
+* --num-classes: 類別數量設定，如果是貓狗照片分類的任務類別數量就是 2 
+* --epochs: 設定訓練多少個 epoch 數量
+* --lr: learning rate 設定
+* --batch: 設定 batch size 值
+* --checkpoint: 模型存放路徑
 
 詳情請參考 [config.py](config.py)
-
-## Model Inference
