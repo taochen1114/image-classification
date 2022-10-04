@@ -22,8 +22,12 @@ data/
 
 * label (int): 類別定義
 
-![](image/train_dataframe.png)
-![](image/val_dataframe.png)
+<!-- ![](image/train_dataframe.png) -->
+ <img src="image/train_dataframe.png" width = "300" height = "200" alt="" align=center />
+
+<!-- ![](image/val_dataframe.png) -->
+ <img src="image/val_dataframe.png" width = "300" height = "200" alt="" align=center />
+
 
 ## Model Training
 
