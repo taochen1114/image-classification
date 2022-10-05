@@ -99,6 +99,14 @@ inference 的 confusion matrix 與 ROC curve 都會存放在 checkpoint 路徑
 <img src="image/checkpoint_contents_demo.png" width = "400" alt="" align=center />
 <!-- ![img](image/checkpoint_contents_demo.png) -->
 
-**classification report demo**
+**Classification Report Demo**
 
 <img src="image/classification_report_demo.png" width = "500" alt="" align=center />
+
+**Confusion Matrix Demo**
+
+<img src="image/Confusion_matrix.png" width = "500" alt="" align=center />
+
+**ROC Curve demo**
+
+<img src="image/roc_curve.png" width = "500" alt="" align=center />
