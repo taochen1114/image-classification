@@ -70,7 +70,7 @@ python main.py \
 python inference.py  \
     --data-dir data/  \
     --test-mode True  \
-    --test data/dogs-vs-cats/val.csv  \
+    --test data/dogs-vs-cats/test.csv  \
     --arch resnet18  \
     -c model_ckpt/  \
     --model-file model_best.pth.tar \
