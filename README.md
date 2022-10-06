@@ -39,11 +39,12 @@ python main.py \
         --val data/dogs-vs-cats/val.csv  \
         --arch resnet18 \
         --num-classes 2 \
-        --epochs 50 \ 
+        --epochs 30 \ 
         --lr 0.001 \
         --batch 32 \
         --checkpoint model_ckpt/  \
-        --aug True
+        --gamma 0.8 --schedule 10 20 \
+        --aug --pretrain 
 ```
 
 參數說明: ( 詳情請參考 [config.py](config.py) )
@@ -57,19 +58,21 @@ python main.py \
 * --lr: learning rate 設定
 * --batch: 設定 batch size 值
 * --checkpoint: 模型存放路徑
-* --aug: 設定 True 會在訓練階段時，load 訓練資料集時做 image augmentation 詳細內容請見 [dataloader.py](dataloader.py)
+* --gamma: learning rate decay ratio 相關設定
+* --schedule: 設定在哪些 epoch 時做 learning rate decay
+* --aug: 設定打開後，會在訓練階段時，load 訓練資料集時做 image augmentation 詳細內容請見 [dataloader.py](dataloader.py)
+* --pretrain: 設定打開後，會 load model imagenet pretrain weight 做 fine-tune 訓練
 
 **training demo**
 
 <img src="image/training_demo.png" width = "500" alt="" align=center />
-
 
 ## Model Inference
 
 ```
 python inference.py  \
     --data-dir data/  \
-    --test-mode True  \
+    --test-mode \
     --test data/dogs-vs-cats/test.csv  \
     --arch resnet18  \
     -c model_ckpt/  \
@@ -81,7 +84,7 @@ python inference.py  \
 參數說明: ( 詳情請參考 [config.py](config.py) )
 
 * --data-dir: 資料集所在的根目錄
-* --test-mode: 測試模式，在 testing 階段要設為 True 詳細內容請見 [dataloader.py](dataloader.py)
+* --test-mode: 設定打開後進入測試模式，在測試階段必需設定才會對於 dataloader 有相對應的處理，詳細內容請見 [dataloader.py](dataloader.py)
 * --test: 測試資料集 test.csv 所在的路徑
 * --arch: 模型架構設定 resnet18, resnet34, resnet50, ...etc
 * --batch: 設定 batch size 值
@@ -92,9 +95,9 @@ python inference.py  \
 
 <img src="image/class_def_txt.png" width = "320" alt="" align=center />
 
-### Inference report
+### Testing report
 
-inference 的 confusion matrix 與 ROC curve 都會存放在 checkpoint 路徑
+模型測試報告的 confusion matrix 與 ROC curve 都會存放在模型檔案存放的 checkpoint 路徑下
 
 <img src="image/checkpoint_contents_demo.png" width = "400" alt="" align=center />
 <!-- ![img](image/checkpoint_contents_demo.png) -->

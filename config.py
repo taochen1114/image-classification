@@ -8,7 +8,7 @@ parser.add_argument('-d', '--data-dir', default='./data',
 parser.add_argument('--train', default='train.csv', type=str, help='path to train csv (default: train.csv)')
 parser.add_argument('--val', default='val.csv', type=str, help='path to val csv (default: val.csv)')
 parser.add_argument('--test', default='test.csv', type=str, help='path to test csv (default: test.csv)')
-parser.add_argument('--test-mode', default=None, type=str, help='set True for Testing / Inference mode')
+parser.add_argument('--test-mode',  action='store_true', help='set for Testing / Inference mode')
 parser.add_argument('--model-file', default='model_best.pth.tar', type=str, help='model file name in checkpoint directory')
 parser.add_argument('--class-def', default='class_def.txt', type=str, help='class definition text file one row per class')
 
@@ -42,7 +42,7 @@ parser.add_argument('--pretrain', action='store_true', help='set for transfer le
 parser.add_argument('--early-stop',default=10, type=int,
                     help='early stop epoch (default: 10)')
 
-parser.add_argument('--aug', default=None, type=str, help='set True for use auto image augmentation')
+parser.add_argument('--aug',  action='store_true', help='set True for use auto image augmentation')
 
 def get_config():
     config, unparsed = parser.parse_known_args()
