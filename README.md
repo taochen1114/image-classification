@@ -47,7 +47,7 @@ python main.py \
         --aug --pretrain 
 ```
 
-參數說明: ( 詳情請參考 [config.py](config.py) )
+參數說明: ( 詳情請參考 [config.py](config.py) 及 [train.sh](train.sh) )
 
 * --data-dir: 資料集所在的根目錄
 * --train:  訓練資料集 train.csv 所在的路徑
@@ -81,7 +81,7 @@ python inference.py  \
     --class-def data/dogs-vs-cats/class_def.txt  
 ```
 
-參數說明: ( 詳情請參考 [config.py](config.py) )
+參數說明: ( 詳情請參考 [config.py](config.py) 及 [test.sh](test.sh) )
 
 * --data-dir: 資料集所在的根目錄
 * --test-mode: 設定打開後進入測試模式，在測試階段必需設定才會對於 dataloader 有相對應的處理，詳細內容請見 [dataloader.py](dataloader.py)
