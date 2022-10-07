@@ -30,7 +30,7 @@ data/
 
 請參考 [preprocessing/dataset_process.ipynb](preprocessing/dataset_process.ipynb)
 
-<img src="image/train_val_test_split.png" width = "500" alt="" align=center />
+<img src="image/train_val_test_split.png" width = "700" alt="" align=center />
 
 ## Model Training
 
@@ -67,7 +67,7 @@ python main.py \
 
 **training demo**
 
-<img src="image/training_demo.png" width = "500" alt="" align=center />
+<img src="image/training_demo.png" width = "700" alt="" align=center />
 
 ## Model Inference
 
