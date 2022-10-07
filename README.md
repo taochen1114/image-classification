@@ -5,7 +5,7 @@ training and testing module for image classification task
 ## Data Preprocessing
 
 以 dogs-vs-cats dataset 為例，請參考 [preprocessing/dataset_process.ipynb](preprocessing/dataset_process.ipynb)
-整理 train.csv 跟 val.csv 兩份資料表單
+整理 train.csv, val.csv 以及 test.csv 三份資料表單
 格式如下
 
 * img_path (string): 相對於照片的根目錄的路徑
@@ -22,13 +22,15 @@ data/
 
 * label (int): 類別定義
 
-<!-- ![](image/train_dataframe.png) -->
+例: Training dataset 裡面的內容:
 
 <img src="image/train_dataframe.png" width = "320" alt="" align=center />
 
-<!-- ![](image/val_dataframe.png) -->
+### Data split to Train / Val / Test
 
-<img src="image/val_dataframe.png" width = "320" alt="" align=center />
+請參考 [preprocessing/dataset_process.ipynb](preprocessing/dataset_process.ipynb)
+
+<img src="image/train_val_test_split.png" width = "500" alt="" align=center />
 
 ## Model Training
 
