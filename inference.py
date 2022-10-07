@@ -32,14 +32,14 @@ def inference(args):
     # for inference report measuring
     pred_list, gt_list, probs_list, gt_onehot_list = [], [], [], []
     filename_list, correct_list = [], []
-    correct, total = 0, 0
-    wrong_case = {}
 
     batch_time = AverageMeter()
     data_time = AverageMeter()
     losses = AverageMeter()
+    accuracy = AverageMeter()
     end = time.time()
 
+    print ('=====Start testing =====')
     with torch.no_grad():
         bar = Bar('Processing', max=len(test_loader))
         for batch_idx, (filenames, inputs, targets) in enumerate(test_loader):
@@ -47,31 +47,33 @@ def inference(args):
             outputs = model(inputs).float()
             outputs = torch.sigmoid(outputs)
 
-            targets_labels = torch.argmax(targets.data, dim=1)
+            y_true = torch.argmax(targets.data, dim=1)
             
             # Measure accuracy and record loss
-            _, classes = torch.max(outputs.data, 1)
+            _, y_pred = torch.max(outputs.data, 1)
             probs_list += outputs.data.tolist()   # add to probability value list
-            pred_list += classes.tolist()      # predict label value list
-            gt_list += targets_labels.tolist() # ground truth label value list
+            pred_list += y_pred.tolist()      # predict label value list
+            gt_list += y_true.tolist() # ground truth label value list
             gt_onehot_list += targets.data.tolist() # ground truth one-hot label value list
             filename_list += list(filenames)
 
-            correct += (classes == targets_labels).sum()
-            total += targets.size(0)
-            correct_list += classes.eq(targets_labels).tolist()
+            correct_list += y_pred.eq(y_true).tolist()
 
             loss = criterion(outputs=outputs, targets=targets)
 
             # Record loss
             losses.update(loss.item(), inputs.size(0))
+
+            # Record accuracy
+            correct = (y_pred == y_true).float().sum()
+            accuracy.update(correct/inputs.size(0), inputs.size(0))
             
             # Measure elapsed time
             batch_time.update(time.time() - end)
             end = time.time()
         
             # Plot progress
-            bar.suffix  = '({}/{}) Data: {:.3f}s | Batch: {:.3f}s | Total: {} | ETA: {} | Loss: {:.6f}'.format(
+            bar.suffix  = '({}/{}) Data: {:.3f}s | Batch: {:.3f}s | Total: {} | ETA: {} | Loss: {:.6f} | Acc: {:.6f}'.format(
                             batch_idx + 1, 
                             len(test_loader), 
                             data_time.avg, 
@@ -79,12 +81,13 @@ def inference(args):
                             bar.elapsed_td, 
                             bar.eta_td, 
                             losses.avg,
+                            accuracy.avg,
                             )
             bar.next()
 
         bar.finish() 
 
-        print ('Average top1 accuracy: {0:.2f}'.format(100.0 * float(correct) / float(total)))
+        print ('Average top1 accuracy: {0:.6f}'.format(accuracy.avg))
 
     # draw_confusion_matrix(gt_list, pred_list, args.checkpoint)
     print_classification_report(gt_list, pred_list)

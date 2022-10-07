@@ -5,7 +5,6 @@ import pandas as pd
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from torch.nn import CrossEntropyLoss, BCELoss, BCEWithLogitsLoss
 from models import ClassificationModel
 from losses import LossFunction
 from config import get_config
@@ -23,6 +22,7 @@ def train(train_loader, model, criterion, optimizer):
     batch_time = AverageMeter()
     data_time = AverageMeter()
     losses = AverageMeter()
+    accuracy = AverageMeter()
     end = time.time()
 
     bar = Bar('Processing', max=len(train_loader))
@@ -41,13 +41,20 @@ def train(train_loader, model, criterion, optimizer):
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-        
+
+        # Compute and Record accuracy
+        _, y_pred = torch.max(outputs.data, 1)
+        y_true = torch.argmax(targets.data, dim=1)
+
+        correct = (y_pred == y_true).float().sum()
+        accuracy.update(correct/inputs.size(0), inputs.size(0))
+
         # Measure elapsed time
         batch_time.update(time.time() - end)
         end = time.time()
        
         # Plot progress
-        bar.suffix  = '({}/{}) Data: {:.3f}s | Batch: {:.3f}s | Total: {} | ETA: {} | Loss: {:.6f}'.format(
+        bar.suffix  = '({}/{}) Data: {:.3f}s | Batch: {:.3f}s | Total: {} | ETA: {} | Loss: {:.6f} | Acc: {:.6f}'.format(
                         batch_idx + 1, 
                         len(train_loader), 
                         data_time.avg, 
@@ -55,12 +62,13 @@ def train(train_loader, model, criterion, optimizer):
                         bar.elapsed_td, 
                         bar.eta_td, 
                         losses.avg,
+                        accuracy.avg,
                         )
         bar.next()
 
     bar.finish() 
         
-    return losses.avg
+    return losses.avg, accuracy.avg
 
 def validation(val_loader, model, criterion):
     # Switch to evaluate mode
@@ -69,6 +77,7 @@ def validation(val_loader, model, criterion):
     batch_time = AverageMeter()
     data_time = AverageMeter()
     losses = AverageMeter()
+    accuracy = AverageMeter()
     end = time.time()
 
     with torch.no_grad():
@@ -80,13 +89,19 @@ def validation(val_loader, model, criterion):
 
             # Record loss
             losses.update(loss.item(), inputs.size(0))
-            
+
+            # Compute and Record accuracy
+            _, y_pred = torch.max(outputs.data, 1)
+            y_true = torch.argmax(targets.data, dim=1)
+            correct = (y_pred == y_true).float().sum()
+            accuracy.update(correct/inputs.size(0), inputs.size(0))
+                
             # Measure elapsed time
             batch_time.update(time.time() - end)
             end = time.time()
         
             # Plot progress
-            bar.suffix  = '({}/{}) Data: {:.3f}s | Batch: {:.3f}s | Total: {} | ETA: {} | Loss: {:.6f}'.format(
+            bar.suffix  = '({}/{}) Data: {:.3f}s | Batch: {:.3f}s | Total: {} | ETA: {} | Loss: {:.6f} | Acc: {:.6f}'.format(
                             batch_idx + 1, 
                             len(val_loader), 
                             data_time.avg, 
@@ -94,12 +109,13 @@ def validation(val_loader, model, criterion):
                             bar.elapsed_td, 
                             bar.eta_td, 
                             losses.avg,
+                            accuracy.avg,
                             )
             bar.next()
 
         bar.finish() 
 
-    return losses.avg
+    return losses.avg, accuracy.avg
 
 
 def main(args, state):
@@ -118,6 +134,7 @@ def main(args, state):
 
     start_epoch = 0
     best_loss = 1000000
+    best_acc = -1
 
     print ('=====Start training and validation=====')
     early_stopping = EarlyStopping(patience=args.early_stop)
@@ -128,18 +145,19 @@ def main(args, state):
         
         print(f"Epoch: {epoch+1} | {args.epochs}, Learning Rate: {state['lr']}")
         
-        train_loss = train(train_loader, model, criterion, optimizer)
-        val_loss = validation(val_loader, model, criterion)
-
+        train_loss, train_acc  = train(train_loader, model, criterion, optimizer)
+        val_loss, val_acc = validation(val_loader, model, criterion)
         
         # Save model
         is_best = val_loss < best_loss
         best_loss = min(val_loss, best_loss)
+        best_acc = max(val_acc, best_acc)
         save_checkpoint({
                 'epoch': epoch + 1,
                 'state_dict': model.state_dict(),
                 'loss': val_loss,
                 'best_loss': best_loss,
+                'best_acc': best_acc,
                 'optimizer' : optimizer.state_dict(),
                 'lr': state['lr'],
             }, is_best, checkpoint=args.checkpoint)
